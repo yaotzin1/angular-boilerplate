@@ -1,0 +1,4 @@
+typings/
+!typings/typings.json
+dist
+node_modules

@@ -1,0 +1,56 @@
+{
+  "name": "angular-boilerplate",
+  "version": "0.0.1",
+  "private": true,
+  "description": "universal boilerplate for angularjs, gulp, typescript and npm",
+  "main": "''",
+  "repository": {
+    "type": "git",
+    "url": "''"
+  },
+  "keywords": [
+    "boilerplate",
+    "typescript",
+    "angularjs"
+  ],
+  "author": "yaotzin",
+  "license": "ISC",
+  "dependencies": {
+    "angular": "^1.5.0",
+    "angular-animate": "^1.5.0",
+    "angular-aria": "^1.5.0",
+    "angular-material": "^1.0.5",
+    "angular-route": "^1.5.0",
+    "angular-ui-router": "^0.2.18",
+    "lodash": "^4.4.0",
+    "lodash-compat": "^3.10.2"
+  },
+  "devDependencies": {
+    "browserify": "^13.0.0",
+    "chai": "^3.5.0",
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-browserify": "^0.5.1",
+    "gulp-cache": "^0.4.2",
+    "gulp-concat": "^2.6.0",
+    "gulp-cssnano": "^2.1.1",
+    "gulp-imagemin": "^2.4.0",
+    "gulp-inject": "^3.0.0",
+    "gulp-livereload": "^3.8.1",
+    "gulp-notify": "^2.2.0",
+    "gulp-postcss": "^6.1.0",
+    "gulp-sass": "^2.2.0",
+    "gulp-server-livereload": "^1.7.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-typescript": "^2.11.0",
+    "gulp-uglify": "^1.5.2",
+    "karma": "^0.13.21",
+    "karma-mocha": "^0.2.2",
+    "mocha": "^2.4.5",
+    "run-sequence": "^1.1.5",
+    "stream-series": "^0.1.1",
+    "tslint": "^3.3.0",
+    "typescript": "^1.7.5"
+  }
+}

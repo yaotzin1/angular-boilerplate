@@ -1,0 +1,6 @@
+{
+    "server":{
+        "files": ["./app/{html,htm}"],
+        "baseDir": "./app"
+    }
+}
