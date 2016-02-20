@@ -3,6 +3,7 @@
 
 module my {
     export class MyStateConfig {
+        /** @ngInject */
         constructor(private $stateProvider: ng.ui.IStateProvider, private $urlRouterProvider: ng.ui.IUrlRouterProvider) {
             this.$stateProvider.state('main', <ng.ui.IState> {
                 url: '/main',

@@ -6,6 +6,8 @@ var browserify = require('gulp-browserify');
 var server = require('gulp-server-livereload');
 var runSequence = require('run-sequence');
 var sass = require('gulp-sass');
+var ngAnnotate = require('gulp-ng-annotate');
+var sourcemaps = require('gulp-sourcemaps');
 
 gulp.task('inject', function(){
     var target = gulp.src('./app_ts/index.html');
@@ -34,8 +36,10 @@ gulp.task('libs', function(){
 
 gulp.task('typescript',function(){
     var tsProject = ts.createProject('./tsconfig.json', {noExternalResolve: false, declarationFiles: true});
-    var tsResult = tsProject.src('./app_ts').pipe(ts(tsProject));
-    return tsResult.js.pipe(gulp.dest('./app'));
+    var tsResult = tsProject.src('./app_ts')
+        .pipe(sourcemaps.init())
+        .pipe(ts(tsProject));
+    return tsResult.js.pipe(sourcemaps.write()).pipe(gulp.dest('./app'));
 });
 
 gulp.task('copy', function(){
@@ -54,6 +58,13 @@ gulp.task('run-server', function(){
         open:true
     }));
 })
+
+gulp.task('annotate-angular', function(){
+    return gulp.src(['./**/*.js','!./**/*.js.map', '!./libs/**/*.js'], {cwd:'./app/'})
+           .pipe(ngAnnotate())
+           .pipe(gulp.dest('dist'));
+});
+
 
 gulp.task('serve', function(){
     runSequence(['typescript', 'libs', 'sass'],'copy','inject', 'run-server');
