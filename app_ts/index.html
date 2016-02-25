@@ -6,13 +6,20 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
         <base href="/" >
+        <script src="/libs/system.js"></script>
+        <script src="/config.js"></script>
         <!-- inject:css -->
         <!-- endinject -->
     </head>
-<body ng-app="app">
-    <div ui-view class="container"></div>
+<body>
+    <script>
 
-    <!-- inject:js -->
-    <!-- endinject -->
+            System.import('app.bootstrap').catch(function(response){
+                console.error(response);
+            });
+
+
+    </script>
+    <div ui-view class="container"></div>
 </body>
 </html>

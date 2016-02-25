@@ -3,10 +3,15 @@
 /// <reference path="./app.constant.ts" />
 /// <reference path="./app.run.ts"/>
 
+import * as myModule from './my-module/my.module';
+import * as appConstants from './app.constant';
+import * as appRun from './app.run';
+import * as appConfig from './app.config';
 
-module app {
-    let angularModule = angular.module('app', ['ui.router', 'my']);
-    angularModule.constant('config', app.Constants.MyAppConstants);
-    angularModule.run(app.Run);
-    angularModule.config(app.MyAppConfig);
+export namespace app {
+    export let name = 'app';
+    let angularModule = angular.module(name, ['ui.router', myModule.my.name]);
+    angularModule.constant('config', appConstants.app.Constants.MyAppConstants);
+    angularModule.run(appRun.app.Run);
+    angularModule.config(appConfig.app.MyAppConfig);
 }

@@ -1,6 +1,6 @@
 /// <reference path="../../../typings/browser.d.ts" />
 
-module my {
+export namespace my {
     export class MyModuleController {
         public viewData: Array<any>;
         static $inject = [];

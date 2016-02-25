@@ -8,6 +8,7 @@ var runSequence = require('run-sequence');
 var sass = require('gulp-sass');
 var ngAnnotate = require('gulp-ng-annotate');
 var sourcemaps = require('gulp-sourcemaps');
+var gulpWatch = require('gulp-watch');
 
 gulp.task('inject', function(){
     var target = gulp.src('./app_ts/index.html');
@@ -16,12 +17,11 @@ gulp.task('inject', function(){
         cwd:'./app/'
     };
 
-    var libStream = gulp.src(['./libs/**/*.js'], gulpSrcConfig);
-    var allFilesStream = gulp.src(['./**/*.js','!./**/*.js.map', '!./**/*.module.js', '!./libs/**/*.js'], gulpSrcConfig);
+    var allFilesStream = gulp.src(['!./config.js', './**/*.js','!./**/*.js.map', '!./**/*.module.js', '!./libs/**/*.js', '!./libs/npm', '!./libs/*.src.js'], gulpSrcConfig);
     var onlyModulesStream = gulp.src(['./**/*.module.js'], gulpSrcConfig);
     var cssFilesStream = gulp.src(['./**/*.css'], gulpSrcConfig);
 
-    return target.pipe(inject(series(libStream, allFilesStream, onlyModulesStream, cssFilesStream)))
+    return target.pipe(inject(series( allFilesStream, onlyModulesStream, cssFilesStream)))
         .pipe(gulp.dest('./app'));
 });
 
@@ -59,6 +59,12 @@ gulp.task('run-server', function(){
     }));
 })
 
+gulp.task('gulp-watch', function(){
+    gulp.src('./app_ts/**/*.html', {base: './app_ts'})
+    .pipe(gulpWatch('./app_ts', {base: './app_ts'}))
+    .pipe(gulp.dest('./app'));
+});
+
 gulp.task('annotate-angular', function(){
     return gulp.src(['./**/*.js','!./**/*.js.map', '!./libs/**/*.js'], {cwd:'./app/'})
            .pipe(ngAnnotate())
@@ -66,7 +72,7 @@ gulp.task('annotate-angular', function(){
 });
 
 
-gulp.task('serve', function(){
+gulp.task('serve', ['gulp-watch'],function(){
     runSequence(['typescript', 'libs', 'sass'],'copy','inject', 'run-server');
 });
 

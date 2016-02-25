@@ -1,6 +1,6 @@
 /// <reference path="../typings/browser.d.ts" />
 
-module app {
+export namespace app {
     export class Constants {
         static get MyAppConstants(): any{
             return {

@@ -4,3 +4,4 @@ dist
 node_modules
 app/*
 !app/.gitkeep
+!app/libs/.dependencies.json
