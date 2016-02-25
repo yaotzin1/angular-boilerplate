@@ -17,11 +17,9 @@ gulp.task('inject', function(){
         cwd:'./app/'
     };
 
-    var allFilesStream = gulp.src(['!./config.js', './**/*.js','!./**/*.js.map', '!./**/*.module.js', '!./libs/**/*.js', '!./libs/npm', '!./libs/*.src.js'], gulpSrcConfig);
-    var onlyModulesStream = gulp.src(['./**/*.module.js'], gulpSrcConfig);
     var cssFilesStream = gulp.src(['./**/*.css'], gulpSrcConfig);
 
-    return target.pipe(inject(series( allFilesStream, onlyModulesStream, cssFilesStream)))
+    return target.pipe(inject(series(cssFilesStream)))
         .pipe(gulp.dest('./app'));
 });
 
