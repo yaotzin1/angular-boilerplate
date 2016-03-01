@@ -9,6 +9,7 @@ var sass = require('gulp-sass');
 var ngAnnotate = require('gulp-ng-annotate');
 var sourcemaps = require('gulp-sourcemaps');
 var gulpWatch = require('gulp-watch');
+var gulpJspm = require('gulp-jspm');
 
 gulp.task('inject', function(){
     var target = gulp.src('./app_ts/index.html');
@@ -45,6 +46,11 @@ gulp.task('copy', function(){
             .src(['./app_ts/**/*.html']).pipe(gulp.dest('./app'));
 });
 
+gulp.task('copy:dist', function(){
+    return gulp
+            .src(['./app/**/*.html', './app/**/*.css', './app/libs/*.js']).pipe(gulp.dest('./dist'));
+});
+
 gulp.task('run-server', function(){
     return gulp.src('./app')
     .pipe(server({
@@ -69,9 +75,36 @@ gulp.task('annotate-angular', function(){
            .pipe(gulp.dest('dist'));
 });
 
+gulp.task('buildDistWrapper', function(){
+    return gulp.src('./app/app.bootstrap.js')
+       .pipe(gulpJspm({
+           minify: true
+       }))
+       .pipe(gulp.dest('./dist'));
+});
+
+gulp.task('build', function(){
+    runSequence(['typescript', 'libs', 'sass'],'copy','inject');
+});
+
+gulp.task('build:dist', function(){
+    runSequence('buildDistWrapper', 'annotate-angular', 'copy:dist');
+});
+
+gulp.task('serve:dist', function(){
+    return gulp.src('./dist')
+    .pipe(server({
+        livereload:true,
+        directoryListing: false,
+        defaultFile: 'index.html',
+        fallback: 'index.html',
+        port:9000,
+        open:true
+    }));
+});
 
 gulp.task('serve', ['gulp-watch'],function(){
-    runSequence(['typescript', 'libs', 'sass'],'copy','inject', 'run-server');
+    runSequence('build', 'run-server');
 });
 
 gulp.task('sass', function () {
