@@ -87,11 +87,6 @@ gulp.task('serve', ['gulp-watch'],function(){
     runSequence('build:dev', 'run-server:dev');
 });
 
-gulp.task('copy:dev', function(){
-    return gulp
-            .src(['./app/**/*.html']).pipe(gulp.dest(paths.appDirectory));
-});
-
 gulp.task('run-server:dev', function(){
     return gulp.src(paths.appDirectory)
     .pipe(server({
@@ -105,7 +100,7 @@ gulp.task('run-server:dev', function(){
 });
 
 gulp.task('build:dev', function(){
-    runSequence(['typescript', 'sass'],'copy:dev','inject');
+    runSequence(['typescript', 'sass'],'inject');
 });
 
 //DISTRIBUTE BUILD
