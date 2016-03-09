@@ -12,46 +12,52 @@ var gulpWatch = require('gulp-watch');
 var gulpJspm = require('gulp-jspm');
 var del = require('del');
 
+
+var paths = {
+    appDirectory: './app',
+    tsDirectory: './app',
+    distDirectory: './dist',
+    tsConfig: 'tsconfig.json',
+    getInjectPath: function() {
+        return this.tsDirectory+'/index.html';
+     },
+     getTypeScriptMainConfiguration: function(){
+         return './'+this.tsConfig;
+     }
+};
+
 gulp.task('inject', function(){
-    var target = gulp.src('./app_ts/index.html');
+    console.log(paths.injectDirectory);
+    var target = gulp.src(paths.getInjectPath());
     var gulpSrcConfig = {
         read: false,
-        cwd:'./app/'
+        cwd:paths.appDirectory+'/'
     };
 
     var cssFilesStream = gulp.src(['./**/*.css'], gulpSrcConfig);
 
     return target.pipe(inject(series(cssFilesStream)))
-        .pipe(gulp.dest('./app'));
-});
-
-gulp.task('libs', function(){
-    return gulp.src('./scripts.js')
-    .pipe(browserify({
-        insertGlobals: true,
-        debug: !gulp.env.production
-    }))
-    .pipe(gulp.dest('./app/libs'))
+        .pipe(gulp.dest(paths.appDirectory));
 });
 
 gulp.task('typescript',function(){
-    var tsProject = ts.createProject('./tsconfig.json', {noExternalResolve: false, declarationFiles: true});
-    var tsResult = tsProject.src('./app_ts')
+    var tsProject = ts.createProject(paths.getTypeScriptMainConfiguration(), {noExternalResolve: false, declarationFiles: true});
+    var tsResult = tsProject.src(paths.tsDirectory)
         .pipe(sourcemaps.init())
         .pipe(ts(tsProject));
-    return tsResult.js.pipe(sourcemaps.write()).pipe(gulp.dest('./app'));
+    return tsResult.js.pipe(sourcemaps.write()).pipe(gulp.dest(paths.appDirectory));
 });
 
 gulp.task('gulp-watch', function(){
-    gulp.src('./app_ts/**/*.html', {base: './app_ts'})
-    .pipe(gulpWatch('./app_ts', {base: './app_ts'}))
-    .pipe(gulp.dest('./app'));
+    gulp.src('./app/**/*.html', {base: paths.appDirectory})
+    .pipe(gulpWatch(paths.appDirectory, {base: paths.appDirectory}))
+    .pipe(gulp.dest(paths.appDirectory));
 });
 
 gulp.task('annotate-angular', function(){
-    return gulp.src(['./**/*.js','!./**/*.js.map', '!./libs/**/*.js'], {cwd:'./app/'})
+    return gulp.src(['./**/*.js','!./**/*.js.map', '!./libs/**/*.js'], {cwd:paths.appDirectory})
     .pipe(ngAnnotate())
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest(paths.distDirectory));
 });
 
 gulp.task('buildDistWrapper', function(){
@@ -59,20 +65,20 @@ gulp.task('buildDistWrapper', function(){
     .pipe(gulpJspm({
         minify: true
     }))
-    .pipe(gulp.dest('./dist'));
+    .pipe(gulp.dest(path.distDirectory));
 });
 
 
 gulp.task('sass', function () {
-    return gulp.src('./app_ts/**/*.scss')
+    return gulp.src('./app/**/*.scss')
     .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest('./app'));
+    .pipe(gulp.dest(paths.appDirectory));
 });
 
 //watch
 
 gulp.task('sass:watch', function () {
-    gulp.watch('./app_ts/**/*.scss', ['sass']);
+    gulp.watch('./app/**/*.scss', ['sass']);
 });
 
 //Developement tasks
@@ -83,11 +89,11 @@ gulp.task('serve', ['gulp-watch'],function(){
 
 gulp.task('copy:dev', function(){
     return gulp
-            .src(['./app_ts/**/*.html']).pipe(gulp.dest('./app'));
+            .src(['./app/**/*.html']).pipe(gulp.dest(paths.appDirectory));
 });
 
 gulp.task('run-server:dev', function(){
-    return gulp.src('./app')
+    return gulp.src(paths.appDirectory)
     .pipe(server({
         livereload:true,
         directoryListing: false,
@@ -99,18 +105,18 @@ gulp.task('run-server:dev', function(){
 });
 
 gulp.task('build:dev', function(){
-    runSequence(['typescript', 'libs', 'sass'],'copy:dev','inject');
+    runSequence(['typescript', 'sass'],'copy:dev','inject');
 });
 
 //DISTRIBUTE BUILD
 
 gulp.task('copy:dist', function(){
     return gulp
-            .src(['./app/**/*.html', './app/**/*.css', './app/libs/*.js']).pipe(gulp.dest('./dist'));
+            .src(['./app/**/*.html', './app/**/*.css', './app/libs/*.js']).pipe(gulp.dest(path.distDirectory));
 });
 
 gulp.task('run-server:dist', function(){
-    return gulp.src('./dist')
+    return gulp.src(paths.distDirectory)
     .pipe(server({
         livereload:true,
         directoryListing: false,

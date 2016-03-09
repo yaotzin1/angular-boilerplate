@@ -2,6 +2,7 @@ typings/
 !typings/typings.json
 dist
 node_modules
-app/*
-!app/.gitkeep
-!app/libs/.dependencies.json
+app/**/*.js
+app/**/*.map
+app/**/*.css
+app/libs

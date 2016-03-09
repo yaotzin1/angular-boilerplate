@@ -3,7 +3,7 @@
 export namespace app {
     export class Run {
         constructor($state: ng.ui.IStateService) {
-            $state.go('main');
+            $state.go('main'); 
         }
     }
 }
