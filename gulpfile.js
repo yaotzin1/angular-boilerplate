@@ -27,7 +27,6 @@ var paths = {
 };
 
 gulp.task('inject', function(){
-    console.log(paths.injectDirectory);
     var target = gulp.src(paths.getInjectPath());
     var gulpSrcConfig = {
         read: false,
@@ -41,6 +40,7 @@ gulp.task('inject', function(){
 });
 
 gulp.task('typescript',function(){
+    console.log(paths.injectDirectory);
     var tsProject = ts.createProject(paths.getTypeScriptMainConfiguration(), {noExternalResolve: false, declarationFiles: true});
     var tsResult = tsProject.src(paths.tsDirectory)
         .pipe(sourcemaps.init())
@@ -48,7 +48,7 @@ gulp.task('typescript',function(){
     return tsResult.js.pipe(sourcemaps.write()).pipe(gulp.dest(paths.appDirectory));
 });
 
-gulp.task('gulp-watch', function(){
+gulp.task('html-watch', function(){
     gulp.src('./app/**/*.html', {base: paths.appDirectory})
     .pipe(gulpWatch(paths.appDirectory, {base: paths.appDirectory}))
     .pipe(gulp.dest(paths.appDirectory));
@@ -83,7 +83,7 @@ gulp.task('sass:watch', function () {
 
 //Developement tasks
 
-gulp.task('serve', ['gulp-watch'],function(){
+gulp.task('serve', function(){
     runSequence('build:dev', 'run-server:dev');
 });
 
