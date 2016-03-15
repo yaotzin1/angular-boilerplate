@@ -107,7 +107,8 @@ gulp.task('run-server:dev', function(){
 });
 
 gulp.task('build:dev', function(){
-    runSequence(['typescript', 'sass'],'inject', 'html-watch');
+    runSequence(['typescript', 'sass'],'inject', 'html-watch'); //html-watch need to be fired after injection of all needed files.
+    //Otherwise build will go to infinity loop
 });
 
 //DISTRIBUTE BUILD
