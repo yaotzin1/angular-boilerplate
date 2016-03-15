@@ -90,7 +90,14 @@ gulp.task('serve', function(){
 gulp.task('run-server:dev', function(){
     return gulp.src(paths.appDirectory)
     .pipe(server({
-        livereload:true,
+        livereload: {
+            enable: true,
+            filter: function(filePath, cb){
+                console.log(filePath);
+                cb(!(/node_modules/.test(filePath)));
+                cb(!(/libs/.test(filePath)));
+            }
+        },
         directoryListing: false,
         defaultFile: 'index.html',
         fallback: 'index.html',
