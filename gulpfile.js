@@ -107,7 +107,7 @@ gulp.task('run-server:dev', function(){
 });
 
 gulp.task('build:dev', function(){
-    runSequence(['typescript', 'sass'],'inject');
+    runSequence(['typescript', 'sass'],'inject', 'html-watch');
 });
 
 //DISTRIBUTE BUILD
