@@ -6,7 +6,7 @@ export namespace my {
         static $inject = [];
         constructor() {
             this.viewData = [
-                {
+                { 
                     value: 'some',
                     value2: 'some2'
                 },

@@ -10,7 +10,7 @@ import * as appConfig from './app.config';
 
 export namespace app {
     export let name = 'app';
-    let angularModule = angular.module(name, ['ui.router', myModule.my.name]);
+    let angularModule = angular.module(name, ['ui.router',  myModule.my.name]);
     angularModule.constant('config', appConstants.app.Constants.MyAppConstants);
     angularModule.run(appRun.app.Run);
     angularModule.config(appConfig.app.MyAppConfig);
