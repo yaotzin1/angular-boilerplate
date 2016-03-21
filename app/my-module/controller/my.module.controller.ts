@@ -6,13 +6,13 @@ export namespace my {
         static $inject = [];
         constructor() {
             this.viewData = [
-                { 
-                    value: 'some',
-                    value2: 'some2'
+                {
+                    name: 'John',
+                    surname: 'Doe'
                 },
                 {
-                    value: 'some3',
-                    value2: 'some4'
+                    name: 'Jane',
+                    surname: 'Kovalsky'
                 }
             ];
         }
