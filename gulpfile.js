@@ -39,7 +39,7 @@ gulp.task('inject', function(){
         .pipe(gulp.dest(paths.appDirectory));
 });
 
-gulp.task('typescript',function(){
+gulp.task('compile:typescript',function(){
     console.log(paths.injectDirectory);
     var tsProject = ts.createProject(paths.getTypeScriptMainConfiguration(), {noExternalResolve: false, declarationFiles: true});
     var tsResult = tsProject.src(paths.tsDirectory)
@@ -48,19 +48,25 @@ gulp.task('typescript',function(){
     return tsResult.js.pipe(sourcemaps.write()).pipe(gulp.dest(paths.appDirectory));
 });
 
-gulp.task('html-watch', function(){
+//watch
+
+gulp.task('watch:html', function(){
     gulp.src('./app/**/*.html', {base: paths.appDirectory})
     .pipe(gulpWatch(paths.appDirectory, {base: paths.appDirectory}))
     .pipe(gulp.dest(paths.appDirectory));
 });
 
-gulp.task('annotate-angular', function(){
+gulp.task('watch:sass', function () {
+    gulp.watch('./app/**/*.scss', ['sass']);
+});
+
+gulp.task('ng:annotate', function(){
     return gulp.src(['./**/*.js','!./**/*.js.map', '!./libs/**/*.js'], {cwd:paths.appDirectory})
     .pipe(ngAnnotate())
     .pipe(gulp.dest(paths.distDirectory));
 });
 
-gulp.task('buildDistWrapper', function(){
+gulp.task('build:dist:wrapper', function(){
     return gulp.src('./app/app.bootstrap.js')
     .pipe(gulpJspm({
         minify: true
@@ -69,17 +75,12 @@ gulp.task('buildDistWrapper', function(){
 });
 
 
-gulp.task('sass', function () {
+gulp.task('compile:sass', function () {
     return gulp.src('./app/**/*.scss')
     .pipe(sass().on('error', sass.logError))
     .pipe(gulp.dest(paths.appDirectory));
 });
 
-//watch
-
-gulp.task('sass:watch', function () {
-    gulp.watch('./app/**/*.scss', ['sass']);
-});
 
 //Developement tasks
 
@@ -107,7 +108,7 @@ gulp.task('run-server:dev', function(){
 });
 
 gulp.task('build:dev', function(){
-    runSequence(['typescript', 'sass'],'inject', 'html-watch'); //html-watch need to be fired after injection of all needed files.
+    runSequence(['compile:typescript', 'compile:sass'],'inject', 'watch:html'); //html-watch need to be fired after injection of all needed files.
     //Otherwise build will go to infinity loop
 });
 
@@ -131,7 +132,7 @@ gulp.task('run-server:dist', function(){
 });
 
 gulp.task('build:dist', function(){
-    runSequence('buildDistWrapper', 'annotate-angular', 'copy:dist');
+    runSequence('build:dist:wrapper', 'ng:annotate', 'copy:dist');
 });
 
 gulp.task('serve:dist', ['run-server:dist'],function(){
