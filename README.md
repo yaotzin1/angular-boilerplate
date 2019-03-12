@@ -1,4 +1,6 @@
-Angular boilerplate
+Angular boilerplate (abandoned - DO NOT USE IT) 
+
+Choose another one - for example: https://github.com/DanielSchranc/angularjs-webpack-boilerplate
 ==
 
 **pre-alpha version**
